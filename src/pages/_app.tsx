@@ -19,6 +19,7 @@ import { Decimal } from '@cosmjs/math';
 import { GasPrice } from '@cosmjs/stargate';
 import { wallets as keplrWallets } from '@cosmos-kit/keplr';
 import { wallets as leapWallets } from '@cosmos-kit/leap';
+import { wallets as ledgerWallets } from '@cosmos-kit/ledger';
 import {
   chains, assets,
 } from 'chain-registry';
@@ -66,6 +67,7 @@ function App({
               wallets={[
                 ...keplrWallets,
                 ...leapWallets,
+                ...ledgerWallets,
               ]}
               walletConnectOptions={{
                 signClient: {
