@@ -1,5 +1,6 @@
 import chainConfigTestnet from './chain_config.testnet.json';
 import chainConfigMainnet from './chain_config.mainnet.json';
+import keplr from './keplr.json';
 import generalConfig from './general_config.json';
 
 /**
