@@ -14,7 +14,7 @@ import { useRecoilValue } from 'recoil';
 import { readMarket } from '@/recoil/market';
 import { chainConfig } from '@/configs';
 import { formatMarket } from '@/utils/format_market';
-import { Wallet } from '../icons/wallet';
+import ConnectWallet from '@/components/connect_wallet';
 import { Search } from '../icons/search';
 import { InputGroup } from '../ui/input-group';
 import MenuDrawer from './menudrawer';
@@ -60,15 +60,7 @@ export default function Header() {
         >
           {chainConfig.network}
         </Center>
-        <IconButton
-          aria-label="connect wallet"
-          rounded="full"
-          bgColor="#707D8A"
-          w="60px"
-          h="60px"
-        >
-          <Wallet />
-        </IconButton>
+        <ConnectWallet />
       </HStack>
     </Flex>
   ) : (
