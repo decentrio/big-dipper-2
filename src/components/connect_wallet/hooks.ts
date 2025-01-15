@@ -120,6 +120,9 @@ const useConnectWalletList = () => {
   const [showWalletDetails, setShowWalletDetails] = useState(false);
   const [wcClient, setWCClient] = useState<WalletConnect | undefined>();
   const [errorMsg, setErrorMsg] = useState<string | undefined>(undefined);
+  const {
+    connect, disconnect,
+  } = useWallet();
 
   const saveUserInfo = (
     address: string,
@@ -175,6 +178,7 @@ const useConnectWalletList = () => {
         reconnector.killSession();
       }
     }
+    disconnect();
     // reset the values
     resetUserInfo();
   };
@@ -285,8 +289,7 @@ const useConnectWalletList = () => {
             response.name || 'Cosmostation',
           );
 
-          setOpenPairKeplrExtensionDialog(false);
-          setOpenLoginSuccessDialog(true);
+          continueToLoginSuccessDialog();
         }
       } catch (e) {
         const errorMessage = e instanceof Error ? e.message : 'Failed to connect to Cosmostation wallet';
@@ -472,6 +475,7 @@ const useConnectWalletList = () => {
       // close the dialog after 3 seconds
       setTimeout(() => {
         setOpenAuthorizeConnectionDialog(false);
+        await connect();
         setOpenLoginSuccessDialog(true);
         setTimeout(() => {
           setOpenLoginSuccessDialog(false);
