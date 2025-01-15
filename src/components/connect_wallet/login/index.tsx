@@ -12,6 +12,8 @@ import { FC } from 'react';
 import { chainConfig } from '@/configs';
 import WalletConnectIcon from './wallet-connect.svg';
 import KeplrIcon from './keplr-wallet.svg';
+import LeapIcon from './leap-wallet.svg';
+import CosmostationIcon from './cosmostation-wallet.svg';
 
 // Get the keplr chain info from chainConfig
 const { keplr } = chainConfig;
@@ -82,6 +84,36 @@ const LoginDialog: FC<LoginDialogProps> = ({
               </Button>
             </div>
           )}
+          <div className={classes.dialogContentButton}>
+            <Button
+              onClick={(e: { preventDefault: () => void }) => {
+                e.preventDefault();
+                handleConnectWallet('Leap Wallet');
+              }}
+              aria-label="connect-leap-wallet-button"
+              className={classes.walletButton}
+            >
+              <div className={classes.walletIcon}>
+                <LeapIcon />
+                <div className={classes.walletConnectLabel}>Leap</div>
+              </div>
+            </Button>
+          </div>
+          <div className={classes.dialogContentButton}>
+            <Button
+              onClick={(e: { preventDefault: () => void }) => {
+                e.preventDefault();
+                handleConnectWallet('Cosmostation');
+              }}
+              aria-label="connect-cosmostation-wallet-button"
+              className={classes.walletButton}
+            >
+              <div className={classes.walletIcon}>
+                <CosmostationIcon />
+                <div className={classes.walletConnectLabel}>Cosmostation</div>
+              </div>
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

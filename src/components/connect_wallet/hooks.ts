@@ -160,6 +160,12 @@ const useConnectWalletList = () => {
       case 'Keplr Extension':
         await continueToKeplrExtensionPairingDialog();
         break;
+      case 'Cosmostation':
+        await continueToCosmostationPairing();
+        break;
+      case 'Leap Wallet':
+        await continueToLeapWalletPairing();
+        break;
       case 'Wallet Connect':
         await continueToWalletConnectPairingDialog();
         break;
@@ -167,6 +173,94 @@ const useConnectWalletList = () => {
         break;
       default:
         break;
+    }
+  };
+
+  const continueToLeapWalletPairing = async () => {
+    setOpenLoginDialog(false);
+
+    if (!isLeapAvailable()) {
+      setOpenInstallKeplrExtensionDialog(true); // Reuse dialog but with Leap URL
+      return;
+    }
+
+    setOpenPairKeplrExtensionDialog(true);
+
+    if (!keplrCustomChainInfo?.chainId) {
+      setErrorMsg('Chain configuration is missing');
+      closeAuthorizeConnectionDialog();
+      return;
+    }
+
+    try {
+      // First try enabling the chain
+      await window.leap?.enable(keplrCustomChainInfo.chainId);
+
+      // Suggest chain if not already configured
+      try {
+        await window.leap?.experimentalSuggestChain(keplrCustomChainInfo);
+      } catch (e) {
+        // Chain already exists, continue
+      }
+
+      const offlineSigner = window.leap?.getOfflineSigner(keplrCustomChainInfo.chainId);
+      if (!offlineSigner) {
+        throw new Error('Failed to get offline signer from Leap wallet');
+      }
+
+      const accounts = await offlineSigner.getAccounts();
+      if (!accounts || accounts.length === 0) {
+        throw new Error('No accounts found in Leap wallet');
+      }
+
+      const key = await window.leap?.getKey(keplrCustomChainInfo.chainId);
+      if (!key) {
+        throw new Error('Failed to get key from Leap wallet');
+      }
+
+      saveUserInfo(
+        accounts[0].address,
+        accounts[0].pubkey,
+        'Leap',
+        key.name || 'Leap Wallet',
+      );
+
+      continueToLoginSuccessDialog();
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to connect to Leap wallet';
+      setErrorMsg(errorMessage);
+      closeAuthorizeConnectionDialog();
+    }
+  };
+
+  const continueToCosmostationPairing = async () => {
+    setOpenLoginDialog(false);
+
+    if (!isCosmostationAvailable()) {
+      setOpenInstallKeplrExtensionDialog(true); // Reuse dialog but with Cosmostation URL
+    } else {
+      setOpenPairKeplrExtensionDialog(true);
+
+      try {
+        const response = await window.cosmostation?.cosmos.request({
+          method: 'cos_requestAccount',
+          params: { chainName: keplrCustomChainInfo?.chainId },
+        });
+
+        if (response) {
+          saveUserInfo(
+            response.address,
+            response.pubkey,
+            'Cosmostation',
+            response.name ?? '',
+          );
+
+          continueToLoginSuccessDialog();
+        }
+      } catch (e) {
+        setErrorMsg((e as Error).message);
+        closeAuthorizeConnectionDialog();
+      }
     }
   };
 

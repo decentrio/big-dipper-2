@@ -9,10 +9,16 @@ import generalConfig from './general_config.json';
  */
 const getChainConfig = () => {
   const chainType = process.env.NEXT_PUBLIC_CHAIN_TYPE || process.env.NEXT_PUBLIC_CHAIN_STATUS;
+  let config;
   if (chainType === 'mainnet') {
-    return chainConfigMainnet;
+    config = chainConfigMainnet;
+  } else {
+    config = chainConfigTestnet;
   }
-  return chainConfigTestnet;
+  return {
+    ...config,
+    keplr,
+  };
 };
 
 const chainConfig = getChainConfig();
