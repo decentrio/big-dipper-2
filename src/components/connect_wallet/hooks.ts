@@ -41,10 +41,8 @@ import { chainConfig } from '@/configs';
 // Get the keplr chain info from chainConfig
 const { keplr } = chainConfig;
 
-let keplrCustomChainInfo: ChainInfo | undefined;
-if (keplr) {
-  keplrCustomChainInfo = JSON.parse(keplr);
-}
+// Get the keplr chain info from chainConfig
+const keplrCustomChainInfo: ChainInfo | undefined = keplr as ChainInfo;
 
 // Cast window as KeplrWindow
 declare const window: KeplrWindow & typeof globalThis;

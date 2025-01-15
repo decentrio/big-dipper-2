@@ -18,10 +18,7 @@ import CosmostationIcon from './cosmostation-wallet.svg';
 // Get the keplr chain info from chainConfig
 const { keplr } = chainConfig;
 
-let keplrCustomChainInfo: ChainInfo | undefined;
-if (keplr) {
-  keplrCustomChainInfo = JSON.parse(keplr);
-}
+const keplrCustomChainInfo: ChainInfo | undefined = keplr as ChainInfo;
 
 type LoginDialogProps = {
   open: boolean;
