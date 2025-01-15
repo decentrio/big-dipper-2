@@ -1,6 +1,8 @@
 import { useStyles } from '@/components/connect_wallet/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
+import { useRecoilState } from 'recoil';
+import { writeWalletSelection } from '@/recoil/wallet';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,6 +23,9 @@ const InstallKeplrExtensionDialog: FC<InstallKeplrExtensionDialogProps> = ({
 }) => {
   const { classes } = useStyles();
   const { t } = useAppTranslation();
+  const [walletSelection] = useRecoilState(writeWalletSelection);
+
+  const walletName = walletSelection || 'Keplr Wallet';
 
   return (
     <div>
@@ -29,7 +34,7 @@ const InstallKeplrExtensionDialog: FC<InstallKeplrExtensionDialogProps> = ({
           <div className={classes.header}>
             <Typography className={classes.title} gutterBottom>
               {t('common:pleaseInstallWallet', {
-                wallet: 'Keplr Wallet',
+                wallet: walletName,
               })}
             </Typography>
             <div>
@@ -42,7 +47,7 @@ const InstallKeplrExtensionDialog: FC<InstallKeplrExtensionDialogProps> = ({
                     </a>,
                   ]}
                   values={{
-                    wallet: 'Keplr Wallet',
+                    wallet: walletName,
                   }}
                 />
               </Typography>

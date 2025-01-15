@@ -38,14 +38,42 @@ import {
 } from 'recoil';
 import { chainConfig } from '@/configs';
 
+interface CosmostationWindow {
+  cosmostation?: {
+    providers: {
+      keplr: {
+        experimentalSuggestChain: (chainInfo: any) => Promise<void>;
+        enable: (chainIds: string | string[]) => Promise<void>;
+      };
+    };
+    cosmos: {
+      request: (args: { method: string; params?: unknown }) => Promise<any>;
+    };
+  };
+}
+
+interface LeapWindow {
+  leap?: {
+    experimentalSuggestChain: (chainInfo: any) => Promise<void>;
+    enable: (chainIds: string | string[]) => Promise<void>;
+    getOfflineSigner: (chainId: string) => any;
+    getKey: (chainId: string) => Promise<{ name: string;
+      algo: string; pubKey: Uint8Array; address: string; bech32Address: string }>;
+  };
+}
+
+declare global {
+  interface Window extends KeplrWindow, CosmostationWindow, LeapWindow {}
+}
+
 // Get the keplr chain info from chainConfig
 const { keplr } = chainConfig;
 
 // Get the keplr chain info from chainConfig
 const keplrCustomChainInfo: ChainInfo | undefined = keplr as ChainInfo;
 
-// Cast window as KeplrWindow
-declare const window: KeplrWindow & typeof globalThis;
+const isLeapAvailable = () => !!window.leap;
+const isCosmostationAvailable = () => !!window.cosmostation;
 
 const useConnectWalletList = () => {
   // UserState
@@ -178,11 +206,12 @@ const useConnectWalletList = () => {
     setOpenLoginDialog(false);
 
     if (!isLeapAvailable()) {
+      setWalletSelection('Leap Wallet');
       setOpenInstallKeplrExtensionDialog(true); // Reuse dialog but with Leap URL
       return;
     }
 
-    setOpenPairKeplrExtensionDialog(true);
+    setOpenAuthorizeConnectionDialog(true);
 
     if (!keplrCustomChainInfo?.chainId) {
       setErrorMsg('Chain configuration is missing');
@@ -193,12 +222,14 @@ const useConnectWalletList = () => {
     try {
       // First try enabling the chain
       await window.leap?.enable(keplrCustomChainInfo.chainId);
-
-      // Suggest chain if not already configured
       try {
+        console.log('Suggesting chain to Leap...');
         await window.leap?.experimentalSuggestChain(keplrCustomChainInfo);
       } catch (e) {
-        // Chain already exists, continue
+        // Only throw if it's not the "chain already exists" error
+        if (!(e instanceof Error) || !e.message.includes('chain already exists')) {
+          throw e;
+        }
       }
 
       const offlineSigner = window.leap?.getOfflineSigner(keplrCustomChainInfo.chainId);
@@ -235,6 +266,7 @@ const useConnectWalletList = () => {
     setOpenLoginDialog(false);
 
     if (!isCosmostationAvailable()) {
+      setWalletSelection('Cosmostation');
       setOpenInstallKeplrExtensionDialog(true); // Reuse dialog but with Cosmostation URL
     } else {
       setOpenPairKeplrExtensionDialog(true);
@@ -250,14 +282,16 @@ const useConnectWalletList = () => {
             response.address,
             response.pubkey,
             'Cosmostation',
-            response.name ?? '',
+            response.name || 'Cosmostation',
           );
 
-          continueToLoginSuccessDialog();
+          setOpenPairKeplrExtensionDialog(false);
+          setOpenLoginSuccessDialog(true);
         }
       } catch (e) {
-        setErrorMsg((e as Error).message);
-        closeAuthorizeConnectionDialog();
+        const errorMessage = e instanceof Error ? e.message : 'Failed to connect to Cosmostation wallet';
+        setErrorMsg(errorMessage);
+        setOpenPairKeplrExtensionDialog(false);
       }
     }
   };
