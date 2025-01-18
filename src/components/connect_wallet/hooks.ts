@@ -37,6 +37,8 @@ import {
   SetterOrUpdater, useRecoilState,
 } from 'recoil';
 import { chainConfig } from '@/configs';
+import { useWallet } from '@/hooks/useWallet';
+import { WalletType } from '@/recoil/wallet/types';
 
 interface CosmostationWindow {
   cosmostation?: {
@@ -44,6 +46,7 @@ interface CosmostationWindow {
       keplr: {
         experimentalSuggestChain: (chainInfo: any) => Promise<void>;
         enable: (chainIds: string | string[]) => Promise<void>;
+        getOfflineSigner: (chainId: string) => any;
       };
     };
     cosmos: {
@@ -227,7 +230,6 @@ const useConnectWalletList = () => {
       // First try enabling the chain
       await window.leap?.enable(keplrCustomChainInfo.chainId);
       try {
-        console.log('Suggesting chain to Leap...');
         await window.leap?.experimentalSuggestChain(keplrCustomChainInfo);
       } catch (e) {
         // Only throw if it's not the "chain already exists" error
@@ -470,16 +472,21 @@ const useConnectWalletList = () => {
 
   const continueToLoginSuccessDialog = () => {
     const address = localStorage.getItem(ADDRESS_KEY);
+    const walletType = localStorage.getItem(CONNECTION_TYPE);
     // check if user is logged in before opening login success dialog
     if (address !== '') {
-      // close the dialog after 3 seconds
-      setTimeout(() => {
-        setOpenAuthorizeConnectionDialog(false);
-        await connect();
-        setOpenLoginSuccessDialog(true);
-        setTimeout(() => {
-          setOpenLoginSuccessDialog(false);
-        }, 3000);
+      setTimeout(async () => {
+        try {
+          setOpenAuthorizeConnectionDialog(false);
+          await connect(walletType as WalletType);
+          setOpenLoginSuccessDialog(true);
+          setTimeout(() => {
+            setOpenLoginSuccessDialog(false);
+          }, 3000);
+        } catch (error) {
+          setErrorMsg(error instanceof Error ? error.message : 'Failed to connect');
+          closeAuthorizeConnectionDialog();
+        }
       }, 3000);
     }
   };

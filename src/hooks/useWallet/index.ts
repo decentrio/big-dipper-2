@@ -1,7 +1,6 @@
 import { useContext } from 'react';
-import {
-  WalletContext, WalletContextType,
-} from '@/recoil/wallet';
+import { WalletContextType } from '@/recoil/wallet/types';
+import { WalletContext } from '@/components/connect_wallet/context';
 
 export const useWallet = (): WalletContextType => {
   const context = useContext(WalletContext);
