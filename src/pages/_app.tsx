@@ -11,7 +11,7 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '@/graphql/client';
 import { chainConfig } from '@/configs';
 import { useWindowOrigin } from '@/hooks/use_window';
-import { WalletProvider } from '@/hooks/useWallet';
+import { WalletProvider } from '@/components/connect_wallet/context';
 import {
   OPEN_GRAPH_SEO,
   TWITTER_SEO,
@@ -28,7 +28,7 @@ function App({
   const { location } = useWindowOrigin();
 
   return (
-    <WalletProvider>
+    <>
       <DefaultSeo
         titleTemplate={`%s | ${chainConfig.title}`}
         title={SEO_TITLE}
@@ -51,16 +51,18 @@ function App({
         client={apolloClient}
       >
         <RecoilRoot>
-          <ChakraProvider value={defaultSystem}>
-            <ThemeProvider attribute="class" disableTransitionOnChange>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
-          </ChakraProvider>
+          <WalletProvider>
+            <ChakraProvider value={defaultSystem}>
+              <ThemeProvider attribute="class" disableTransitionOnChange>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </ChakraProvider>
+          </WalletProvider>
         </RecoilRoot>
       </ApolloProvider>
-    </WalletProvider>
+    </>
   );
 }
 
