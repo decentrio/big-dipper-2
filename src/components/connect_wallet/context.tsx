@@ -29,6 +29,11 @@ export const WalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
     isConnected,
     getSigningClient: async () => {
       const walletType = localStorage.getItem(CONNECTION_TYPE) as WalletType;
+
+      if (!walletType) {
+        throw new Error('No wallet connected');
+      }
+
       let signingClient: OfflineAminoSigner & OfflineDirectSigner;
 
       switch (walletType) {
@@ -62,8 +67,13 @@ export const WalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
         signingClient,
       );
 
+      const accounts = await signingClient.getAccounts();
+      if (!accounts || accounts.length === 0) {
+        throw new Error('No accounts found');
+      }
+
       return {
-        address,
+        address: accounts[0].address,
         signAndBroadcast: async (signerAddress: string, messages: any[], fee: any) => {
           const result = await client.signAndBroadcast(signerAddress, messages, fee);
           return result;

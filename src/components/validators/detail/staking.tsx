@@ -10,7 +10,7 @@ import NoData from '@/components/helper/nodata';
 import Delegations from '@/components/staking/delegations';
 import Undelegations from '@/components/staking/undelegations';
 import { useStaking } from './hooks';
-import { DelegateForm } from '../delegateForm';
+import { DelegateDialog } from '../dialog';
 
 export default function Staking({ address }) {
   const {
@@ -36,7 +36,7 @@ export default function Staking({ address }) {
           )
         </TabsTrigger>
         <TabsTrigger value={3}>
-          Delegate
+          <DelegateDialog validatorAddress={address} />
         </TabsTrigger>
       </TabsList>
 
@@ -57,9 +57,6 @@ export default function Staking({ address }) {
               setPage={setUnboningsPage}
               displayMode={1}
             />
-          </TabsContent>
-          <TabsContent value={3}>
-            <DelegateForm validatorAddress={address} />
           </TabsContent>
         </Box>
       ) : (
