@@ -61,8 +61,11 @@ export type StakingType<T> = {
 };
 
 export interface DelegationType {
-    address: string;
-    amount: TokenUnit;
+    bond_weight?: string | null,
+    amount?: string | null,
+    denom?: string | null,
+    staker_addr: string,
+    val_addr: string
 }
 
 export interface RedelegationType {
@@ -74,23 +77,20 @@ export interface RedelegationType {
 
 export interface UnbondingType {
     address: string;
-    amount: TokenUnit;
-    completionTime?: string;
+    amount: string;
+    denom: string;
 }
 
 export type DelegationsType = StakingType<DelegationType>;
 export type RedelegationsType = StakingType<RedelegationType>;
 export type UnbondingsType = StakingType<UnbondingType>;
 
-export interface StakingState {
-    tab: number;
-}
-
 export type Delegations = {
-    coins: MsgCoin[];
-    entries: Array<{
-        balance: string;
-    }>;
+    bond_weight?: string | null,
+    amount?: string | null,
+    denom?: string | null,
+    staker_addr: string,
+    val_addr: string
 };
 
 export type Redelegations = {
@@ -102,7 +102,10 @@ export type Redelegations = {
 };
 
 export type Undelegations = {
-    entries: Array<{
-        balance: string;
-    }>;
+    bond_weight?: string | null,
+    amount?: string | null,
+    denom?: string | null,
+    staker_addr: string,
+    val_addr: string,
+    creation_height: number;
 };
