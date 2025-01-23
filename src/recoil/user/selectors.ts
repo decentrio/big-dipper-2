@@ -1,6 +1,10 @@
-import { atomState, PubKey } from '@/recoil/user/atom';
+import {
+  atomState, PubKey,
+} from '@/recoil/user/atom';
 import { mergeStateChange } from '@/utils/merge_state_change';
-import { DefaultValue, ReadOnlySelectorOptions, selector } from 'recoil';
+import {
+  DefaultValue, ReadOnlySelectorOptions, selector,
+} from 'recoil';
 
 const getUserAddress: ReadOnlySelectorOptions<string>['get'] = ({ get }) => {
   const state = get(atomState);
@@ -10,7 +14,9 @@ const getUserAddress: ReadOnlySelectorOptions<string>['get'] = ({ get }) => {
 export const writeUserAddress = selector({
   key: 'user.write.address',
   get: getUserAddress,
-  set: ({ get, set }, value) => {
+  set: ({
+    get, set,
+  }, value) => {
     if (value instanceof DefaultValue) return;
     const prevState = get(atomState);
     const newState = mergeStateChange(prevState, { address: value });
@@ -31,7 +37,9 @@ const getIsUserLoggedIn: ReadOnlySelectorOptions<boolean>['get'] = ({ get }) => 
 export const writeIsUserLoggedIn = selector({
   key: 'user.write.loggedIn',
   get: getIsUserLoggedIn,
-  set: ({ get, set }, value) => {
+  set: ({
+    get, set,
+  }, value) => {
     if (value instanceof DefaultValue) return;
     const prevState = get(atomState);
     const newState = mergeStateChange(prevState, { loggedIn: value });
@@ -52,7 +60,9 @@ const getWalletName: ReadOnlySelectorOptions<string>['get'] = ({ get }) => {
 export const writeWalletName = selector({
   key: 'user.write.walletName',
   get: getWalletName,
-  set: ({ get, set }, value) => {
+  set: ({
+    get, set,
+  }, value) => {
     if (value instanceof DefaultValue) return;
     const prevState = get(atomState);
     const newState = mergeStateChange(prevState, { walletName: value });
@@ -73,11 +83,15 @@ const getUserPubKey: ReadOnlySelectorOptions<PubKey>['get'] = ({ get }) => {
 export const writeUserPubKey = selector({
   key: 'user.write.pubKey',
   get: getUserPubKey,
-  set: ({ get, set }, value) => {
+  set: ({
+    get, set,
+  }, value) => {
     if (value instanceof DefaultValue) return;
     const prevState = get(atomState);
     const newState = mergeStateChange(prevState, {
-      pubKey: { type: value.type, value: value.value },
+      pubKey: {
+        type: value.type, value: value.value,
+      },
     });
     set(atomState, newState);
   },

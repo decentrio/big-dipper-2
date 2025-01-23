@@ -9,3 +9,18 @@ export interface AtomState {
   walletConnectURI: string;
   walletSelection: string;
 }
+
+export type WalletType = 'Keplr' | 'Leap' | 'Cosmostation';
+
+export interface WalletClient {
+  address: string;
+  signAndBroadcast: (signerAddress: string, messages: any[], fee: any) => Promise<any>;
+}
+
+export interface WalletContextType {
+  address: string | undefined;
+  isConnected: boolean;
+  getSigningClient: () => Promise<WalletClient | null>;
+  connect: (walletType: WalletType) => Promise<void>;
+  disconnect: () => void;
+}
