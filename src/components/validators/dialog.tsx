@@ -99,15 +99,15 @@ export const DelegateDialog = ({
       <DialogContent>
         <DialogHeader>
           <Flex justify={"space-between"}>
-            <DialogTitle>Delegate</DialogTitle>
+            <DialogTitle color={'black'}>Delegate</DialogTitle>
             <DialogTrigger style={{ cursor: "pointer" }}>
               <IoCloseOutline size={30} />
             </DialogTrigger>
           </Flex>
         </DialogHeader>
         {!wallet.walletAddress ? (
-          <DialogBody>
-            <VStack align="stretch" spacing={4}>
+          <DialogBody >
+            <VStack bg={'white'} color={'black'} align="stretch" spacing={4}>
               <Text fontSize="md" textAlign="center">
                 You need to connect your wallet to use this feature.
               </Text>
@@ -131,7 +131,7 @@ export const DelegateDialog = ({
         ) : (
           <form onSubmit={handleSubmit}>
             <DialogBody>
-              <VStack align="stretch">
+              <VStack bg={'white'} color={'black'} align="stretch">
                 {/* Sender */}
                 <Box>
                   <Text fontSize="sm" mb={1}>

@@ -64,7 +64,7 @@ import {
             <Wallet />
           </IconButton>
         </PopoverTrigger>
-        <PopoverContent w="400px">
+        <PopoverContent bg={'white'} color={'black'} w="400px">
           <PopoverArrow />
           <PopoverBody>
             {/* Header */}
@@ -106,6 +106,7 @@ import {
                       borderColor={
                         selectedWallet === wallet.id ? "black" : "#E2E8F0"
                       }
+                      color={'black'}
                       borderRadius="md"
                       justify="space-between"
                       align="center"
