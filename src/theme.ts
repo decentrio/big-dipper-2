@@ -5,12 +5,12 @@ const config = defineConfig({
             colors: {
                 bg: {
                     DEFAULT: {
-                        value: { _light: "{colors.white}", _dark: "none" }, // Custom background
+                        value: { _light: "{colors.white}", _dark: "white" }, // Custom background
                     },
                 },
                 fg: {
                     DEFAULT: {
-                        value: { _light: "{colors.white}", _dark: "{colors.white}" },
+                        value: { _light: "{colors.white}", _dark: "{colors.black}" },
                     },
                 },
             },

@@ -1,16 +1,15 @@
-import Layout from '@/components/layout/layout';
-import { ThemeProvider } from 'next-themes';
-import { AppProps } from 'next/app';
-import {
-  ChakraProvider
-} from '@chakra-ui/react';
-import React from 'react';
-import { RecoilRoot } from 'recoil';
-import { DefaultSeo } from 'next-seo';
-import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '@/graphql/client';
-import { chainConfig } from '@/configs';
-import { useWindowOrigin } from '@/hooks/use_window';
+import Layout from "@/components/layout/layout";
+import { ThemeProvider } from "next-themes";
+import { Theme } from "@chakra-ui/react";
+import { AppProps } from "next/app";
+import { ChakraProvider } from "@chakra-ui/react";
+import React from "react";
+import { RecoilRoot } from "recoil";
+import { DefaultSeo } from "next-seo";
+import { ApolloProvider } from "@apollo/client";
+import { useApollo } from "@/graphql/client";
+import { chainConfig } from "@/configs";
+import { useWindowOrigin } from "@/hooks/use_window";
 import {
   OPEN_GRAPH_SEO,
   TWITTER_SEO,
@@ -18,12 +17,10 @@ import {
   ADDITIONAL_META_TAGS,
   SEO_TITLE,
   SEO_DESCRIPTION,
-} from '../utils/utils';
+} from "../utils/utils";
 import { system } from "@/theme";
 
-function App({
-  Component, pageProps,
-}: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps.initialApolloState);
   const { location } = useWindowOrigin();
 
@@ -36,8 +33,8 @@ function App({
         description={SEO_DESCRIPTION}
         canonical={location}
         openGraph={{
-          type: 'website',
-          locale: 'en_US',
+          type: "website",
+          locale: "en_US",
           title: `${chainConfig.title}`,
           description: SEO_DESCRIPTION,
           url: location,
@@ -47,15 +44,15 @@ function App({
         additionalLinkTags={ADDITIONAL_LINK_TAGS_SEO}
         additionalMetaTags={ADDITIONAL_META_TAGS}
       />
-      <ApolloProvider
-        client={apolloClient}
-      >
+      <ApolloProvider client={apolloClient}>
         <RecoilRoot>
           <ChakraProvider value={system}>
             <ThemeProvider attribute="class" disableTransitionOnChange>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              <Theme appearance="light">
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </Theme>
             </ThemeProvider>
           </ChakraProvider>
         </RecoilRoot>
