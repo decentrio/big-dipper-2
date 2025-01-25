@@ -52,7 +52,7 @@ import {
     };
   
     return (
-      <PopoverRoot open={wallet.openWalletConnectPopover} onOpenChange={triggerWalletConnectPopover} lazyMount unmountOnExit>
+      <PopoverRoot bg={'white'} open={wallet.openWalletConnectPopover} onOpenChange={triggerWalletConnectPopover} lazyMount unmountOnExit>
         <PopoverTrigger asChild>
           <IconButton
             aria-label="connect wallet"

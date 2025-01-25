@@ -96,9 +96,9 @@ export const DelegateDialog = ({
           Delegate
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent bg="white">
         <DialogHeader>
-          <Flex justify={"space-between"}>
+          <Flex bg='white' justify={"space-between"}>
             <DialogTitle color={'black'}>Delegate</DialogTitle>
             <DialogTrigger style={{ cursor: "pointer" }}>
               <IoCloseOutline size={30} />
@@ -106,7 +106,7 @@ export const DelegateDialog = ({
           </Flex>
         </DialogHeader>
         {!wallet.walletAddress ? (
-          <DialogBody >
+          <DialogBody bg="white">
             <VStack bg={'white'} color={'black'} align="stretch" spacing={4}>
               <Text fontSize="md" textAlign="center">
                 You need to connect your wallet to use this feature.
@@ -159,7 +159,7 @@ export const DelegateDialog = ({
                 </Box>
 
                 {/* Amount */}
-                <Box>
+                <Box >
                   <Flex justify="space-between" mb={1}>
                     <Text fontSize="sm" mb={1}>
                       Amount
@@ -172,7 +172,7 @@ export const DelegateDialog = ({
                       {denomSymbol}
                     </Text>
                   </Flex>
-                  <Group w={"full"} attached>
+                  <Group bg={'white'} w={"full"} attached>
                     <Input
                       name="amount"
                       placeholder="Enter amount"
