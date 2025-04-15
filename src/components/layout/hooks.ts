@@ -81,8 +81,8 @@ export const useSearchBar = (t: TFunction) => {
         ({ snapshot }) =>
             async (value: string, clear?: () => void) => {
                 const parsedValue = value.replace(/\s+/g, '');
-                if (searchData.seeds.includes(parsedValue)) {
-                    router.push(`/${searchData[parsedValue].path}/${searchData[parsedValue].value}`)
+                if (searchData.seeds.includes(parsedValue.toLocaleLowerCase())) {
+                    router.push(`/${searchData[parsedValue.toLocaleLowerCase()].path}/${searchData[parsedValue.toLocaleLowerCase()].value}`)
                 } else if (consensusRegex.test(parsedValue)) {
                     const validatorAddress = await snapshot.getPromise(readValidator(parsedValue));
                     if (validatorAddress) {
